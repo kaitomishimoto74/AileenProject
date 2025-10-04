@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace AttendanceMonitoringSystem.Controllers
@@ -10,12 +11,15 @@ namespace AttendanceMonitoringSystem.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly StudentAttendanceDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public HomeController(ILogger<HomeController> logger, 
-            StudentAttendanceDbContext context) 
+            StudentAttendanceDbContext context,
+            UserManager<IdentityUser> userManager) 
         { 
           _logger = logger;
           _context = context;
+          _userManager = userManager;
         }
         [Authorize(Roles = "Instructor, Student")]
         public IActionResult Index ()
@@ -35,6 +39,8 @@ namespace AttendanceMonitoringSystem.Controllers
         }
         public IActionResult StudentAdding(string? id)
         {
+            ViewBag.RegisteredStudents = _userManager.Users.ToList();
+
             if (id  != null) {
                 var studentInDb = _context.Attendance.SingleOrDefault(student => student.Id == id);
                 return View(studentInDb);
@@ -188,10 +194,25 @@ namespace AttendanceMonitoringSystem.Controllers
             _context.SaveChanges();
             return RedirectToAction("Attendance");
         }
+        [Authorize(Roles = "Student")]
+    public IActionResult MyAttendance()
+{
+    var attendance = _context.Attendance.ToList();
+    return View(attendance);
+}
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult AddAttendance()
+        {
+            var model = new AttendanceSelectViewModel
+            {
+                RegisteredStudents = _userManager.Users.ToList()
+            };
+            return View(model);
         }
     }
 }

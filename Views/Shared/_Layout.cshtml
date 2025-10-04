@@ -23,10 +23,24 @@
                             <a class="nav-link @((ViewContext.RouteData.Values["action"]?.ToString() ?? "") == "Index" ? "active" : "")"
                                asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link @((ViewContext.RouteData.Values["action"]?.ToString() ?? "") == "Attendance" ? "active" : "")"
-                               asp-controller="Home" asp-action="Attendance">Attendance</a>
-                        </li>
+                        @using Microsoft.AspNetCore.Identity
+                        @inject SignInManager<IdentityUser> SignInManager
+                        @inject UserManager<IdentityUser> UserManager
+
+                        @if (User.IsInRole("Instructor"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @((ViewContext.RouteData.Values["action"]?.ToString() ?? "") == "Attendance" ? "active" : "")"
+                                   asp-controller="Home" asp-action="Attendance">Attendance</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @((ViewContext.RouteData.Values["action"]?.ToString() ?? "") == "MyAttendance" ? "active" : "")"
+                                   asp-controller="Home" asp-action="MyAttendance">View Attendance</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link @((ViewContext.RouteData.Values["action"]?.ToString() ?? "") == "StudentAdding" ? "active" : "")"
                                asp-controller="Home" asp-action="StudentAdding">Add Student</a>

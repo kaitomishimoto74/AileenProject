@@ -1,0 +1,17 @@
+﻿@model AttendanceMonitoringSystem.Models.AttendanceSelectViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Add Attendance";
+}
+
+<h2>Add Attendance</h2>
+
+<form asp-action="AddAttendance" method="post">
+    <div class="form-group">
+        <label asp-for="SelectedStudentId">Select Student</label>
+        <select asp-for="SelectedStudentId" class="form-control" asp-items="@(new SelectList(Model.RegisteredStudents, "UserName", "UserName"))"></select>
+    </div>
+    <!-- Add other attendance fields as needed -->
+    <button type="submit" class="btn btn-primary">Add Attendance</button>
+</form>

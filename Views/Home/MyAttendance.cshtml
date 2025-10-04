@@ -1,0 +1,47 @@
+@model IEnumerable<AttendanceMonitoringSystem.Models.Student>
+
+@{
+    ViewData["Title"] = "My Attendance";
+}
+
+<h2>Student Attendance</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No attendance records found.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Afternoon Status</th>
+                <th>Afternoon Time In</th>
+                <th>Afternoon Time Out</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.Id</td>
+                <td>@record.Name</td>
+                <td>@record.TimeIn?.ToShortDateString()</td>
+                <td>@(record.Status == true ? "Present" : "Absent")</td>
+                <td>@record.TimeIn?.ToShortTimeString()</td>
+                <td>@record.TimeOut?.ToShortTimeString()</td>
+                <td>@(record.AfternoonStatus == true ? "Present" : "Absent")</td>
+                <td>@record.AfternoonTimeIn?.ToShortTimeString()</td>
+                <td>@record.AfternoonTimeOut?.ToShortTimeString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
