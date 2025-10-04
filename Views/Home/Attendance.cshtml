@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Attendace";
+}   
+@model List<Student>
+
+<style>
+    table{
+        border-collapse: separate;
+        border-spacing: 12px 8px;
+        width: 100%;
+    }
+
+    th,td{
+        border: 1px solid #ccc;
+        padding: 8px 14px;
+        text-align: center;
+    }
+    
+    th{
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+    hr{
+        border: none;
+        height: 4px;
+        background-color: #333;
+        margin: 20px 0;
+    }
+    h1{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 50px
+    }
+    .delete{
+        color: red;
+    }
+</style>    
+
+<div class="text-center">
+    <h1>BSIT-3 BLOCK-2</h1>
+        <h1>College Days Attendance</h1>
+    <br/>
+    <hr/>
+    <h3>Total Student: @Model.Count()</h3>
+    <br />
+    <hr />
+    <table class="studenttable">
+        <thead>
+            <tr>
+                <th>Student Id</th>
+                <th>Student</th>
+                <th>Morning In</th>
+                <th>Morning Out</th>
+                <th>Morning Status</th>
+                <th>Afternoon In</th>
+                <th>Afternoon Out</th>
+                <th>Afternoon Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var student in Model)
+                {
+                    <tr>
+                        <td>@student.Id</td>
+                        <td>@student.Name</td>
+                        <td>
+                            @(student.TimeIn.HasValue? student.TimeIn.Value.ToString("hh:mm tt") : "No Time Set")
+                        </td>
+                        <td>
+                            @(student.TimeOut.HasValue? student.TimeOut.Value.ToString("hh:mm tt") : "No Time Set")
+                        </td>
+                        <td>
+                            <form asp-action="ToggleStatus" asp-route-id="@student.Id" method="post" style="display:inline;">
+                                <button type="submit"
+                                        class="btn btn-sm @(student.Status == true ? "btn-success" : "btn-danger")">
+                                    @(student.Status == true ? "Present" : "Absent")
+                                </button>
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                        <td>
+                            @(student.AfternoonTimeIn.HasValue? student.AfternoonTimeIn.Value.ToString("hh:mm tt") : "No Time Set")
+                        </td>
+                        <td>
+                            @(student.AfternoonTimeOut.HasValue? student.AfternoonTimeOut.Value.ToString("hh:mm tt") : "No Time Set")
+                        </td>
+                        <td>
+                            <form asp-action="ToggleAfternoonStatus" asp-route-id="@student.Id" method="post" style="display:inline;">
+                                <button type="submit"
+                                        class="btn btn-sm @(student.AfternoonStatus == true ? "btn-success" : "btn-danger")">
+                                    @(student.AfternoonStatus == true ? "Present" : "Absent")
+                                </button>
+                                @Html.AntiForgeryToken()
+                            </form>
+                        </td>
+                        <td><a asp-action="StudentStatusEditing" asp-route-id="@student.Id">Info</a>|<a class="delete" asp-action="DeleteStudent" asp-route-id="@student.Id">Delete</a></td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Student Adding";
+}
+@model AttendanceMonitoringSystem.Models.Student
+
+<style>
+     h1{
+         font: Arial;
+         font-size: 40px;
+         font-weight: bold;
+
+     }
+       
+    
+   
+</style>
+<div class="text-center">
+    <h1 class="display-4">Student Adding Form</h1>
+</div>
+<form asp-action="StudentAddingForm">
+    <label>Student ID</label>
+    <input class="form-control" type="text" asp-for="Id" placeholder="e.g. 23-016486" />
+
+    <label>Student: </label>
+    <input class="form-control" type="text" placeholder="Enter student name" asp-for="Name"/>
+
+
+    <button class="btn btn-primary mt-3" type="submit">Add to Room Attendance</button>
+</form>
