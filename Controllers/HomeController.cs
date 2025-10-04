@@ -1,6 +1,8 @@
 ﻿using AttendanceMonitoringSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace AttendanceMonitoringSystem.Controllers
 {
@@ -15,7 +17,7 @@ namespace AttendanceMonitoringSystem.Controllers
           _logger = logger;
           _context = context;
         }
-
+        [Authorize(Roles = "Instructor, Student")]
         public IActionResult Index ()
         {
             return View();
@@ -25,7 +27,7 @@ namespace AttendanceMonitoringSystem.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = "Instructor")]
         public IActionResult Attendance()
         {
             var allAttendance = _context.Attendance.ToList();
