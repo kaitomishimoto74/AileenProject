@@ -37,6 +37,7 @@ namespace AttendanceMonitoringSystem.Controllers
             var allAttendance = _context.Attendance.ToList();
             return View(allAttendance);
         }
+        [Authorize(Roles = "Instructor")]
         public IActionResult StudentAdding(string? id)
         {
             ViewBag.RegisteredStudents = _userManager.Users.ToList();

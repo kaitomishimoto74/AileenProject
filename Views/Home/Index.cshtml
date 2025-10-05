@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -31,12 +35,17 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 16px rgba(0,0,0,0.25);
     }
-
 </style>
 
 <div style="display: flex; justify-content: center; align-items: center; height: 80vh; flex-direction: column; text-align: center;">
     <h1 class="display-4">Attendance Monitoring System</h1>
-    <a asp-controller="Home" asp-action="Attendance" class="btn custom-btn">Attendance</a><br />
+    @if (User.IsInRole("Student"))
+    {
+        <a asp-controller="Home" asp-action="MyAttendance" class="btn custom-btn">View Attendance</a><br />
+    }
+    else if (User.IsInRole("Instructor"))
+    {
+        <a asp-controller="Home" asp-action="Attendance" class="btn custom-btn">Attendance</a><br />
+    }
     <a asp-controller="Home" asp-action="StudentAdding" class="btn custom-btn">Add Student</a>
-
 </div>
